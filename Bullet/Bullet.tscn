@@ -1,0 +1,37 @@
+[gd_scene load_steps=4 format=3 uid="uid://dismy7my4co2v"]
+
+[ext_resource type="Texture2D" uid="uid://d5rmon474r4u" path="res://Textures/shoot/shoot1.png" id="1_0opyv"]
+
+[sub_resource type="CSharpScript" id="CSharpScript_65ogo"]
+script/source = "using Godot;
+using System;
+
+public partial class Bullet : RigidBody2D
+{
+	// Called when the node enters the scene tree for the first time.
+	public override void _Ready()
+	{
+	}
+
+	// Called every frame. 'delta' is the elapsed time since the previous frame.
+	public override void _Process(double delta)
+	{
+	}
+}
+"
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_pn0po"]
+radius = 3.0
+height = 20.0
+
+[node name="Bullet" type="RigidBody2D"]
+gravity_scale = 0.0
+script = SubResource("CSharpScript_65ogo")
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_0opyv")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_pn0po")
