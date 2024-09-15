@@ -1,0 +1,40 @@
+[gd_scene load_steps=3 format=3 uid="uid://cqfere05pvwbd"]
+
+[ext_resource type="Script" path="res://MainScenes/HUD.cs" id="1_5c28v"]
+[ext_resource type="FontFile" uid="uid://bwwq0022afwod" path="res://Fonts/SankofaDisplay-Regular.ttf" id="2_067yr"]
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_5c28v")
+
+[node name="ScoreLabel" type="Label" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -60.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = 97.0
+grow_horizontal = 0
+theme_override_fonts/font = ExtResource("2_067yr")
+theme_override_font_sizes/font_size = 64
+text = "0"
+
+[node name="Button" type="Button" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -68.5
+offset_top = -42.5
+offset_right = 68.5
+offset_bottom = 42.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_fonts/font = ExtResource("2_067yr")
+theme_override_font_sizes/font_size = 64
+text = "Start"
+
+[connection signal="pressed" from="Button" to="." method="OnButtonPressed"]
