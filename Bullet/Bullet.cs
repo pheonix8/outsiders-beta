@@ -15,4 +15,16 @@ public partial class Bullet : Area2D
 		QueueFree();
 	}
 	
+	private void OnBodyEntered(Node2D body)
+	{
+		if (body is Enemy enemy)
+		{
+			enemy.TakeDamage(34);
+			Hide();
+			QueueFree();
+		}
+		
+
+	}
+	
 }
