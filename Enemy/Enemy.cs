@@ -17,7 +17,6 @@ public partial class Enemy : RigidBody2D
 
 	public void TakeDamage(int damage)
 	{
-		GD.Print("Taking damage");
 		_currentHealth -= damage;
 		if (_currentHealth <= 0)
 		{
@@ -25,10 +24,10 @@ public partial class Enemy : RigidBody2D
 			QueueFree();
 		}
 	}
-	
-	public override void _PhysicsProcess(double delta)
+
+	public void StartMoving()
 	{
-		Position -=  new Vector2(Speed * (float)delta, 0);
+		ApplyCentralImpulse(new Vector2(-Speed, 0));
 	}
 
 	private void OnVisibleOnScreenNotifier2DScreenExited()

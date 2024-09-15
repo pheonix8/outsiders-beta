@@ -1,9 +1,18 @@
-[gd_scene load_steps=5 format=3 uid="uid://cvrx87w7w4npk"]
+[gd_scene load_steps=7 format=3 uid="uid://cvrx87w7w4npk"]
 
 [ext_resource type="PackedScene" uid="uid://nyym6sbfefqu" path="res://Player/Player.tscn" id="1_8hk2k"]
 [ext_resource type="Texture2D" uid="uid://briwqftjoabhd" path="res://Textures/background/bg-preview.png" id="1_cdh40"]
 [ext_resource type="Script" path="res://MainScenes/Gameplay.cs" id="1_hwpgq"]
 [ext_resource type="PackedScene" uid="uid://cqfere05pvwbd" path="res://MainScenes/HUD.tscn" id="3_ojmnt"]
+
+[sub_resource type="Curve2D" id="Curve2D_oai4l"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 1000, 96, 0, 0, 0, 0, 1000, 496)
+}
+point_count = 2
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_w7avs"]
+size = Vector2(18, 560)
 
 [node name="Gameplay" type="Node2D"]
 script = ExtResource("1_hwpgq")
@@ -22,14 +31,27 @@ one_shot = true
 [node name="EnemySpawnTimer" type="Timer" parent="."]
 wait_time = 5.0
 
-[node name="EnemySpawnLocation" type="Marker2D" parent="."]
-position = Vector2(1048, 264)
+[node name="EnemyPath" type="Path2D" parent="."]
+curve = SubResource("Curve2D_oai4l")
+
+[node name="EnemyPathLocation" type="PathFollow2D" parent="EnemyPath"]
+position = Vector2(1000, 96)
+rotates = false
 
 [node name="StartPosition" type="Marker2D" parent="."]
 position = Vector2(64, 264)
 
 [node name="HUD" parent="." instance=ExtResource("3_ojmnt")]
 
+[node name="GameOverArea" type="Area2D" parent="."]
+position = Vector2(0, 264)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameOverArea"]
+position = Vector2(1, 0)
+shape = SubResource("RectangleShape2D_w7avs")
+
 [connection signal="timeout" from="StartTimer" to="." method="OnStartTimerTimeout"]
 [connection signal="timeout" from="EnemySpawnTimer" to="." method="OnEnemySpawnTimerTimeout"]
 [connection signal="StartGame" from="HUD" to="." method="NewGame"]
+[connection signal="body_entered" from="GameOverArea" to="." method="OnGameOverAreaBodyEntered"]

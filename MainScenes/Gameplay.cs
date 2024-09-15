@@ -38,14 +38,31 @@ public partial class Gameplay : Node2D
 	private void OnEnemySpawnTimerTimeout()
 	{
 		Enemy enemy = _enemyScene.Instantiate<Enemy>();
-		var spawnPosition = GetNode<Marker2D>("EnemySpawnLocation");
-		enemy.Position = spawnPosition.Position;
-		GetParent().AddChild(enemy);
+		var spawnLocation = GetNode<PathFollow2D>("EnemyPath/EnemyPathLocation");
+		spawnLocation.ProgressRatio = GD.Randf();
+		
+		enemy.Position = spawnLocation.Position;
+		
+		enemy.StartMoving();
+		AddChild(enemy);
 	}
 
 	private void OnDestroyed()
 	{
 		_score++;
 		_hud.UpdateScore(_score);
+	}
+
+	private void OnGameOverAreaBodyEntered(Node2D body)
+	{
+		if (body is Enemy enemy)
+		{
+			GetNode<Timer>("StartTimer").Stop();
+			GetNode<Timer>("EnemySpawnTimer").Stop();
+			GetNode<Player>("Player").Hide();
+			_score = 0;
+			_hud.UpdateScore(_score);
+			GetNode<Button>("HUD/Button").Show();
+		}
 	}
 }
