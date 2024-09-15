@@ -3,7 +3,7 @@ using System;
 
 public partial class Bullet : Area2D
 {
-	[Export] public int Speed { get; set; } = 400;
+	[Export] private int Speed { get; set; } = 400;
 
 	public override void _PhysicsProcess(double delta)
 	{

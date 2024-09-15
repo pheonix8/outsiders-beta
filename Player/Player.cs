@@ -3,22 +3,22 @@ using System;
 
 public partial class Player : CharacterBody2D
 {
-    public Vector2 ScreenSize;
-    public AnimatedSprite2D Sprite;
-    public Marker2D Marker;
-    public PackedScene BulletScene;
-    public Timer ShootTimer;
+    private Vector2 _screenSize;
+    private AnimatedSprite2D _sprite;
+    private Marker2D _marker;
+    private PackedScene _bulletScene;
+    private Timer _shootingTimeout;
     
-    [Export] public int Speed { get; set; } = 200;
-    [Export] public float BulletCooldown { get; set; } = 0.1f;
+    [Export] private int Speed { get; set; } = 200;
+    [Export] private float BulletCooldown { get; set; } = 0.1f;
     
     public override void _Ready()
     {
-        ScreenSize = GetViewportRect().Size;
-        Sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
-        Marker = GetNode<Marker2D>("Marker2D");
-        ShootTimer = GetNode<Timer>("Timer");
-        BulletScene = GD.Load<PackedScene>("res://Bullet/Bullet.tscn");
+        _screenSize = GetViewportRect().Size;
+        _sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+        _marker = GetNode<Marker2D>("Marker2D");
+        _shootingTimeout = GetNode<Timer>("Timer");
+        _bulletScene = GD.Load<PackedScene>("res://Bullet/Bullet.tscn");
     }
     
     public override void _Process(double delta)
@@ -26,21 +26,21 @@ public partial class Player : CharacterBody2D
         switch (Velocity.Y)
         {
             case < 0:
-                Sprite.Play("up");
+                _sprite.Play("up");
                 break;
             case > 0:
-                Sprite.Play("down");
+                _sprite.Play("down");
                 break;
             case 0:
-                Sprite.Play("straight");
+                _sprite.Play("straight");
                 break;
         }
 
-        if (Input.IsActionPressed("shoot") && ShootTimer.IsStopped())
+        if (Input.IsActionPressed("shoot") && _shootingTimeout.IsStopped())
         {
-            ShootTimer.Start(BulletCooldown);
-            Bullet bullet = BulletScene.Instantiate<Bullet>();
-            bullet.GlobalPosition = Marker.GlobalPosition;
+            _shootingTimeout.Start(BulletCooldown);
+            Bullet bullet = _bulletScene.Instantiate<Bullet>();
+            bullet.GlobalPosition = _marker.GlobalPosition;
             GetParent().AddChild(bullet);
         }
     }
@@ -74,8 +74,8 @@ public partial class Player : CharacterBody2D
         Position += Velocity * (float)delta;
         
         Position = new Vector2(
-            x: Mathf.Clamp(Position.X, 0, ScreenSize.X),
-            y: Mathf.Clamp(Position.Y, 0, ScreenSize.Y)
+            x: Mathf.Clamp(Position.X, 0, _screenSize.X),
+            y: Mathf.Clamp(Position.Y, 0, _screenSize.Y)
         );
     }
 }
