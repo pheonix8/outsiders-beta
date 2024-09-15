@@ -5,12 +5,20 @@ public partial class Player : CharacterBody2D
 {
     public Vector2 ScreenSize;
     public AnimatedSprite2D Sprite;
+    public Marker2D Marker;
+    public PackedScene BulletScene;
+    public Timer ShootTimer;
+    
     [Export] public int Speed { get; set; } = 200;
+    [Export] public float BulletCooldown { get; set; } = 0.1f;
     
     public override void _Ready()
     {
         ScreenSize = GetViewportRect().Size;
         Sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+        Marker = GetNode<Marker2D>("Marker2D");
+        ShootTimer = GetNode<Timer>("Timer");
+        BulletScene = GD.Load<PackedScene>("res://Bullet/Bullet.tscn");
     }
     
     public override void _Process(double delta)
@@ -27,8 +35,16 @@ public partial class Player : CharacterBody2D
                 Sprite.Play("straight");
                 break;
         }
+
+        if (Input.IsActionPressed("shoot") && ShootTimer.IsStopped())
+        {
+            ShootTimer.Start(BulletCooldown);
+            Bullet bullet = BulletScene.Instantiate<Bullet>();
+            bullet.GlobalPosition = Marker.GlobalPosition;
+            GetParent().AddChild(bullet);
+        }
     }
-    
+
     public override void _PhysicsProcess(double delta)
     {
         var velocity = Vector2.Zero;
