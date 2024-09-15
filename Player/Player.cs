@@ -19,6 +19,8 @@ public partial class Player : CharacterBody2D
         _marker = GetNode<Marker2D>("Marker2D");
         _shootingTimeout = GetNode<Timer>("Timer");
         _bulletScene = GD.Load<PackedScene>("res://Bullet/Bullet.tscn");
+        
+        Hide();
     }
     
     public override void _Process(double delta)
@@ -77,5 +79,11 @@ public partial class Player : CharacterBody2D
             x: Mathf.Clamp(Position.X, 0, _screenSize.X),
             y: Mathf.Clamp(Position.Y, 0, _screenSize.Y)
         );
+    }
+
+    public void Start(Vector2 position)
+    {
+        Position = position;
+        Show();
     }
 }

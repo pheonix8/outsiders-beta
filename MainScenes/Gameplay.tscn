@@ -1,15 +1,35 @@
-[gd_scene load_steps=3 format=3 uid="uid://cvrx87w7w4npk"]
+[gd_scene load_steps=5 format=3 uid="uid://cvrx87w7w4npk"]
 
 [ext_resource type="PackedScene" uid="uid://nyym6sbfefqu" path="res://Player/Player.tscn" id="1_8hk2k"]
 [ext_resource type="Texture2D" uid="uid://briwqftjoabhd" path="res://Textures/background/bg-preview.png" id="1_cdh40"]
+[ext_resource type="Script" path="res://MainScenes/Gameplay.cs" id="1_hwpgq"]
+[ext_resource type="PackedScene" uid="uid://cqfere05pvwbd" path="res://MainScenes/HUD.tscn" id="3_ojmnt"]
 
 [node name="Gameplay" type="Node2D"]
+script = ExtResource("1_hwpgq")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(-15, -6)
-scale = Vector2(3.64706, 3.4625)
+scale = Vector2(3.52941, 3.4)
 texture = ExtResource("1_cdh40")
 centered = false
 
 [node name="Player" parent="." instance=ExtResource("1_8hk2k")]
-position = Vector2(196, 126)
+
+[node name="StartTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="EnemySpawnTimer" type="Timer" parent="."]
+wait_time = 5.0
+
+[node name="EnemySpawnLocation" type="Marker2D" parent="."]
+position = Vector2(1048, 264)
+
+[node name="StartPosition" type="Marker2D" parent="."]
+position = Vector2(64, 264)
+
+[node name="HUD" parent="." instance=ExtResource("3_ojmnt")]
+
+[connection signal="timeout" from="StartTimer" to="." method="OnStartTimerTimeout"]
+[connection signal="timeout" from="EnemySpawnTimer" to="." method="OnEnemySpawnTimerTimeout"]
+[connection signal="StartGame" from="HUD" to="." method="NewGame"]
